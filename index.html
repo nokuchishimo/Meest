@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата замовлення</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .payment-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        .payment-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .payment-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .payment-header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .amount-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .amount-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .amount-value {
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+        }
+        
+        .card-details {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .card-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .card-number {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            font-family: 'Courier New', monospace;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+        
+        .copy-btn:active {
+            background: #4a5cbd;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .instructions p {
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .confirm-section {
+            margin-top: 30px;
+        }
+        
+        .confirm-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+        
+        .confirm-btn:active {
+            transform: translateY(0);
+        }
+        
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        
+        .success-message {
+            display: none;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            color: #28a745;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .modal-text {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .modal-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .modal-btn:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-header">
+            <h1>💳 Оплата замовлення</h1>
+            <p>Завершіть оплату для підтвердження замовлення</p>
+        </div>
+        
+        <div class="amount-section">
+            <div class="amount-label">До оплати</div>
+            <div class="amount-value">632 ₴</div>
+        </div>
+        
+        <div class="card-details">
+            <div class="card-label">📋 Реквізити для оплати:</div>
+            <div class="card-number">
+                <span id="cardNumber"> 5175477412977447</span>
+                <button class="copy-btn" onclick="copyCardNumber()">Копіювати</button>
+            </div>
+            <div class="success-message" id="successMessage">
+                ✓ Номер картки скопійовано!
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <p><strong>Інструкція:</strong><br>
+            1. Скопіюйте номер рахунку<br>
+            2. Відкрийте банківський додаток<br>
+            3. Здійсніть переказ на суму 632 грн<br>
+            4. Поверніться і натисніть "Я оплатив"</p>
+        </div>
+        
+        <div class="confirm-section">
+            <button class="confirm-btn" onclick="confirmPayment()">✓ Я оплатив замовлення</button>
+        </div>
+        
+        <div class="footer">
+            <p>Після підтвердження ви отримаєте повідомлення на email</p>
+        </div>
+    </div>
+    
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-icon">✅</div>
+            <div class="modal-title">Дякуємо за оплату!</div>
+            <div class="modal-text">
+                Ваше замовлення прийнято в обробку.<br>
+                Ми надішлемо підтвердження протягом 5-10 хвилин.
+            </div>
+            <button class="modal-btn" onclick="closeModal()">Зрозуміло</button>
+        </div>
+    </div>
+    
+    <script>
+        function copyCardNumber() {
+            const cardNumber = document.getElementById('cardNumber').textContent;
+            navigator.clipboard.writeText(cardNumber).then(function() {
+                const successMessage = document.getElementById('successMessage');
+                successMessage.style.display = 'block';
+                setTimeout(function() {
+                    successMessage.style.display = 'none';
+                }, 2000);
+            });
+        }
+        
+        function confirmPayment() {
+            const modal = document.getElementById('confirmModal');
+            modal.style.display = 'flex';
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('confirmModal');
+            modal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
